@@ -11,6 +11,7 @@ This is an Apache Maven-based project, which requires a JDK to compile.
 All dependencies are handled by Maven, along with the creation of an executable jar.
 
 Install a Java JDK v17+ and ensure that a `JAVA_HOME` environment variable is configured to point to its root directory.
+Add the JDK's `bin` directory to the system `PATH` environment variable.
 - Test: `java --version`
 
 Install Apache Maven v3+. Check that `PATH` has Maven's bin directory listed along with the JDK's bin directory.
