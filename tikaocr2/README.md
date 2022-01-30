@@ -1,7 +1,7 @@
 # Text Extraction, Mining, and Search Example
 
-This repo provides an example of text extraction using Apache Tika and Tesseract for OCR when needed. 
-The text is then parsed for the presence of entities such as people and locations. The final output is stored in MongoDB Atlas, where Atlas Search (a Lucene-based fulltext search engine) can be configured to query it.
+This repo provides an example of text extraction using **Apache Tika** and **Tesseract** for OCR when needed. 
+The text is then parsed for the presence of entities such as people and locations, using **OpenNLP**. The final output is stored in **MongoDB Atlas**, where **Atlas Search** (a Lucene-based fulltext search engine) can be configured to query it.
 
 ## Prerequisites
 
