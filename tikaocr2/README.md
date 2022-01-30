@@ -1,7 +1,7 @@
-# Text Extraction and Mining Example
+# Text Extraction, Mining, and Search Example
 
 This repo provides an example of text extraction using Apache Tika and Tesseract for OCR when needed. 
-The text is then parsed for the presence of entities such as people and locations. The final output is stored in MongoDB Atlas, where Lucene-based fulltext search can be set up to query it.
+The text is then parsed for the presence of entities such as people and locations. The final output is stored in MongoDB Atlas, where Atlas Search (a Lucene-based fulltext search engine) can be configured to query it.
 
 ## Prerequisites
 
@@ -44,3 +44,15 @@ Maven is configured to compile all dependencies, including the named entity reco
 Maven outputs other files along with the jar. All are located in `/target`.
 
 Run: `java -jar ./target/application-1.0-shaded.jar`
+
+## Set up Atlas Search
+
+Now that the enriched document data is available in MongoDB Atlas, Atlas Search can index and query it based on your needs. For this example, we will explore the following Atlas Search capabilities: TBD.
+
+### Indexes
+
+TBD
+
+### Queries
+
+TBD
