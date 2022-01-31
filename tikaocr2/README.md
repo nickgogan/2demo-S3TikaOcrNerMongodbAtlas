@@ -8,43 +8,58 @@ The text is then parsed for the presence of entities such as people and location
 ### Java & Maven
 
 This is an Apache Maven-based project, which requires a JDK to compile.
-All dependencies are handled by Maven, along with the creation of an executable jar.
+All dependencies are handled by Maven, along with the creation of an executable jar, but both a JDK and Maven need to be manually installed.
 
-Install a Java JDK v17+ and ensure that a `JAVA_HOME` environment variable is configured to point to its root directory.
+Install a Java JDK (v17+) and ensure that a `JAVA_HOME` environment variable is configured to point to its root directory.
 Add the JDK's `bin` directory to the system `PATH` environment variable.
 - Test: `java --version`
 
-Install Apache Maven v3+. Check that `PATH` has Maven's `bin` directory listed.
+Install Apache Maven (v3+). Check that `PATH` has Maven's `bin` directory listed.
 - Test: `mvn --version`
 
 ### Tesseract OCR Engine
 
-Tesseract is used for OCR'ing files that are detected by Tika as containing primarily image files. 
+Tesseract is used for OCR'ing files that are detected by Tika as containing primarily images. This is done automatically by Tika.
+This dependency is not managed by Maven and must be installed separately. 
 Install Tesseract and ensure that its `bin` directory is listed in the system's `PATH`.
 
 Test: `tesseract --version`
 
 ### AWS S3
 
-Source files are pulled from S3. Authentication to S3 is done by setting the following environment variables:
+The source files containing the text we extract and mine are pulled from an S3 bucket.
+The AWS SDK and S3 dependencies are managed by Maven. They will be installed by Maven when running the jar creation commands. 
+Authentication to S3 is done by setting the following system environment variables:
 - `AWS_ACCESS_KEY=<AwsAccessKey>`
 - `AWS_SECRET_ACCESS_KEY=<AwsSecretAccessKey>`
 
-When creating the client, the AWS SDK checks for the presence of these environment variables and uses their values to authenticate and authorize access to the S3 resources.
+When creating the client at runtime, the AWS SDK checks for the presence of these environment variables and uses their values to authenticate and authorize access to the S3 resources.
 Other methods exist for authentication and authorization, this is just one way to do it.
 
 ## Build & Run the Jar
 
-Open a terminal at the project root.
+1. Create a `Constants.java` file for the project in `tikaocr2\src\main\java\com\mongodb\tikaocr2` and provide the following:
+```
+package com.mongodb.tikaocr2;
 
-Download dependencies: `mvn dependency:resolve`
+public class Constants {
+    public static String mongoURI = "<MongoDBAtlasConnectionString>";
+    public static String strDb = "<MongoDBAtlasDatabaseName>";
+    public static String strColl = "<MongoDBAtlasCollectionName>";
+}
+```
+These variables are imported by `App.java` at startup.
 
-Build the jar: `mvn clean package shade:shade`
+2. Open a terminal at the project root.
+
+3. Download dependencies: `mvn dependency:resolve`
+
+4. Build the jar: `mvn clean package shade:shade`
 
 Maven is configured to compile all dependencies, including the named entity recognition models, into a single jar.
 Maven outputs other files along with the jar. All are located in `/target`. For this example, only the packaged jar is used.
 
-Run: `java -jar ./target/application-1.0-shaded.jar`
+5. Run the app: `java -jar ./target/application-1.0-shaded.jar`
 
 ## Set up Atlas Search
 
