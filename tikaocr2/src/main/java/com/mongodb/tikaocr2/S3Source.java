@@ -20,7 +20,7 @@ import java.util.Vector;
 
 public class S3Source {
     S3Client s3Client; //Note: AWS credentials managed via environment variables.
-    public HashMap<String, Vector<S3Object>> filesToProcess;
+    public HashMap<String, Vector<S3Object>> filesToProcess; //NOT thread-safe.
 
     public S3Source() { }
 
@@ -41,6 +41,7 @@ public class S3Source {
     public void crawl() {
         filesToProcess = new HashMap<>();
         List<Bucket> buckets = s3Client.listBuckets().buckets();
+
         for(Bucket bucket : buckets) {
             String bucketName = bucket.name();
             System.out.println("[S3Source.crawl] Bucket: " + bucketName);
@@ -52,6 +53,7 @@ public class S3Source {
             ListObjectsV2Response response = s3Client.listObjectsV2(request);
             List<S3Object> objects = response.contents();
             Vector<S3Object> files = new Vector<>();
+
             for (ListIterator iterator = objects.listIterator(); iterator.hasNext(); ) {
                 try {
                     S3Object file = (S3Object) iterator.next();
