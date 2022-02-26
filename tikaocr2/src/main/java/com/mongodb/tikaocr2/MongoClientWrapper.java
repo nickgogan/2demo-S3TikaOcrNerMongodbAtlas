@@ -33,7 +33,12 @@ public class MongoClientWrapper {
 
     public void insert(Document doc)
     {
-        coll.insertOne(doc);
+        try {
+            coll.insertOne(doc);
+        }
+        catch(Exception ex) {
+            System.out.println("[MongoClientWrapper.insert] Error inserting document into database.");
+        }
     }
     public void insert(List<Document> docs)
     {

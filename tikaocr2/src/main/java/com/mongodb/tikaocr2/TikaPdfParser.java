@@ -23,6 +23,7 @@ public class TikaPdfParser {
     public boolean ParseWithNER = false;
     protected HashMap<String, String> nerModels;
     protected OpenNLPNERecogniser nerDetector;
+    protected final int WriteLimit = -1; //Unlimited, needed for processing files with more than 100_000 chars.
 
     public TikaPdfParser() {
         id = java.util.UUID.randomUUID();
@@ -77,7 +78,9 @@ public class TikaPdfParser {
             System.out.println("[TikaPdfParser.parseWithDefaults] Null input stream.");
         }
 
-        BodyContentHandler fulltext = new BodyContentHandler();
+        // -1 to have infinite write limit.
+        // Tika will throw an exception when ingesting files with more than 100_000 chars.
+        BodyContentHandler fulltext = new BodyContentHandler(this.WriteLimit);
         Metadata metadata = new Metadata();
         ParsedDocument parsedDocument = new ParsedDocument(filename);
 
@@ -105,7 +108,7 @@ public class TikaPdfParser {
             System.out.println("[TikaPdfParser.parseWithDefaultsNer] Null input stream.");
         }
 
-        BodyContentHandler fulltext = new BodyContentHandler();
+        BodyContentHandler fulltext = new BodyContentHandler(this.WriteLimit);
         Metadata metadata = new Metadata();
         ParsedDocument parsedDocument = new ParsedDocument(filename);
 

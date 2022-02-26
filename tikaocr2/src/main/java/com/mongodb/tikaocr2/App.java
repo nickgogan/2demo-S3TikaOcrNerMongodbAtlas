@@ -43,10 +43,15 @@ public class App
             System.out.println("Processing bucket [" + bucketName + "]...");
             for(S3Object file : s3Client.filesToProcess.get(bucketName))
             {
-                String filename = file.key();
+                String filename = file.key(); //Contains the .pdf extension, e.g. 00123-2020.PMC7569162.pdf
                 System.out.println("Processing file [" + filename + "].");
                 InputStream filestream = s3Client.getInputStream(bucketName, filename);
                 ParsedDocument parsedDocument = pdfParser.parse(filestream, filename);
+                if (parsedDocument == null)
+                {
+                    System.out.println("Null parsedDocument, skipping...");
+                    continue;
+                }
 //                System.out.println(parsedDocument.getContent()); //Test
                 mongoClient.insert(parsedDocument.convertToMongo());
             }

@@ -13,6 +13,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.bson.Document;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ParsedDocument {
     public String filename;
@@ -70,9 +71,14 @@ public class ParsedDocument {
 
     public Document convertToMongo()
     {
-        Document doc = new Document("filename", this.filename);
+        Document doc = new Document("filename", this.filename); // Example filename: 00123-2020.PMC7569162.pdf
+        String[] filenameParts = this.filename.split(Pattern.quote("."), -1); //Split on the '.' char and return all parts.
+        String articleId = filenameParts[1];
+        String docId = filenameParts[0];
         doc.append("addedDate", Calendar.getInstance().getTime());
         doc.append("fulltext", this.fulltext);
+        doc.append("pubmedPageUrl", "https://www.ncbi.nlm.nih.gov/pmc/articles/"+articleId);
+        doc.append("pubmedPdfUrl", "https://www.ncbi.nlm.nih.gov/pmc/articles/"+articleId+"/pdf/"+docId+".pdf");
 
         String[] metadataKeys = this.metadata.names();
         Arrays.sort(metadataKeys);
