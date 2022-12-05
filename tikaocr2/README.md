@@ -72,3 +72,42 @@ TBD
 ### Queries
 
 TBD
+
+## Run from AWS EC2
+### VM Setup
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install git
+sudo apt-get install maven
+sudo apt-get install imagemagick
+sudo apt-get install ttf-mscorefonts-installer
+sudo apt-get install tesseract-ocr
+vi ~/.bashrc
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_ACCESS_KEY_ID=<yourKeyId>
+export AWS_SECRET_ACCESS_KEY=<yourSecretKey>
+save file
+source ~/.bashrc
+### Repo Setup
+git clone https://github.com/nickgogan/2demo-S3TikaOcrNerMongodbAtlas.git
+vi 2demo-S3TikaOcrNerMongodbAtlas/tikaocr2/src/main/java/com/mongodb/tikaocr2/Constants.java
+Add this code:
+```
+package com.mongodb.tikaocr2;
+
+public class Constants {
+    public static String mongoURI = <clusterConnStr>;
+    public static String strDb = "DEMO_TIKA-SEARCH";
+    public static String strColl = "pubmed";
+}
+```
+save & quit
+### Atlas Setup
+Add EC2 instance's public IPv4 address to Atlas's IP Access List
+Ensure that the target cluster is up and reachable from the EC2 instance
+### Build & Run Uber Jar
+cd to top-level tikaocr2/
+mvn clean
+mvn clean package shade:shade
+cd to newly-built target
+java -jar application_1.0-shaded.jar
